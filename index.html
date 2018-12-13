@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather Clock</title>
+</head>
+<body>
+<p>Click the button to get the current weather in your location.</p>
+
+<button onclick="getLocation()">Get Weather</button>
+<p id="demo">Your Location: [.........]</p>
+<p id="weather">Your Weather: [.........]</p>
+
+</body>
+<script>
+var x = document.getElementById("demo");
+var y = document.getElementById("weather");
+
+function getLocation() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude;
+  var url = "https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.onload = function() {
+    var data = JSON.parse(this.response);
+    y.innerHTML = "The weather at your location is: " + data.weather["0"].main;
+    if (request.status >= 200 && request.status < 400) {
+        console.log("hello");
+    } else {
+      console.log('error');
+    }
+  }
+  request.send();
+  console.log(url);
+}
+
+function showWeather() {
+var request = new XMLHttpRequest();
+request.open('GET', 'https://fcc-weather-api.glitch.me/api/current?lat=35&lon=139', true);
+request.onload = function() {
+  var data = JSON.parse(this.response);
+  x.innerHTML = data.weather["0"].main;
+  if (request.status >= 200 && request.status < 400) {
+      console.log("hello");
+  } else {
+    console.log('error');
+  }
+}
+request.send();
+}
+
+</script
+</html>
