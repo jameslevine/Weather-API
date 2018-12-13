@@ -2,37 +2,44 @@
 <html>
 <head>
 <title>Weather Clock</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
 <p>Click the button to get the current weather in your location.</p>
 
 <button onclick="getLocation()">Get Weather</button>
 <p id="demo">Your Location: [.........]</p>
+<p id="town">Your Town: [.........]</p>
 <p id="weather">Your Weather: [.........]</p>
+<p id="temp">Your Temperature: [.........]</p>
 
 </body>
 <script>
-var x = document.getElementById("demo");
+var w = document.getElementById("demo");
+var x = document.getElementById("town");
 var y = document.getElementById("weather");
+var z = document.getElementById("temp");
 
 function getLocation() {
-
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
-    x.innerHTML = "Geolocation is not supported by this browser.";
+    w.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
 function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude +
+  w.innerHTML = "Latitude: " + position.coords.latitude +
   "<br>Longitude: " + position.coords.longitude;
   var url = "https://fcc-weather-api.glitch.me/api/current?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
   var request = new XMLHttpRequest();
   request.open('GET', url, true);
   request.onload = function() {
     var data = JSON.parse(this.response);
+    console.log(data);
+    x.innerHTML = "Your town is: " + data.name + ", " + data.sys.country;
     y.innerHTML = "The weather at your location is: " + data.weather["0"].main;
+    z.innerHTML = "The temperature at your location is: " + data.main.temp + "°C";
     if (request.status >= 200 && request.status < 400) {
         console.log("hello");
     } else {
@@ -43,19 +50,8 @@ function showPosition(position) {
   console.log(url);
 }
 
-function showWeather() {
-var request = new XMLHttpRequest();
-request.open('GET', 'https://fcc-weather-api.glitch.me/api/current?lat=35&lon=139', true);
-request.onload = function() {
-  var data = JSON.parse(this.response);
-  x.innerHTML = data.weather["0"].main;
-  if (request.status >= 200 && request.status < 400) {
-      console.log("hello");
-  } else {
-    console.log('error');
-  }
-}
-request.send();
+function setBackground() {
+  
 }
 
 </script
